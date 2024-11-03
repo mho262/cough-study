@@ -194,6 +194,8 @@ export default {
                             <h1>Cough Study Questionnaire</h1>
                             <p class="lead">This questionnaire is intended to measure the severity of your cough.</p>
 
+                            <hr class="my-4"/>
+
                             <div v-if="this.step < this.questions.length">
                                 <p>Select the response that best describes how you have been in the past week.</p>
 
@@ -209,8 +211,10 @@ export default {
                                         >
                                         </Question>
 
+                                        <hr class="my-4"/>
+
                                         <div class="d-flex">
-                                            <div class="ms-auto">
+                                            <div class="mx-auto">
                                                 <!--<button v-if="this.step + 1 < this.questions.length" class="btn btn-primary" @click="this.step++">
                                                     Next >
                                                 </button>-->
