@@ -192,7 +192,7 @@ export default {
                     <div class="col-xl-8 col-10 mx-auto">
                         <div class="my-3">
                             <h1>Cough Study Questionnaire</h1>
-                            <p class="lead">This questionnaire is intended to measure the severity of your cough.</p>
+                            <p class="lead">This questionnaire is intended to measure the severity of your cough. It is for informational purposes only.</p>
 
                             <hr class="my-4"/>
 
@@ -201,7 +201,7 @@ export default {
 
                                 <div>
                                     <div class="">
-                                        <Question class="my-2" v-for="(question, index) in this.questions"
+                                        <Question class="my-5" v-for="(question, index) in this.questions"
                                             :Index="index + 1"
                                             :Text="question.Text"
                                             :Options="question.Options"
@@ -231,7 +231,7 @@ export default {
                                 <p>Please show this page to your health practitioner</p>
                                 <div>
                                     <div>
-                                        <h4>Calculated scores</h4>
+                                        <h4>Cough score</h4>
                                         <table class="table mb-5">
                                             <thead>
                                                 <tr>
@@ -242,7 +242,7 @@ export default {
                                             <tbody>
                                                 <tr v-for="section in this.getSections">
                                                     <td class="p-2 pe-4" style="width: 1%">{{section}}</td>
-                                                    <td class="p-2">{{this.calculateScores.get(section)}}</td>
+                                                    <td class="p-2">{{(Math.round(this.calculateScores.get(section) * 100) / 100).toFixed(2)}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
