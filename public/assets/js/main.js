@@ -28,7 +28,7 @@ export default {
     },
     data() {
         return {
-            step: 100,
+            step: 0,
             scores: new Map(),
             questions: [
                 {
