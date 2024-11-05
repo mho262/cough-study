@@ -21,18 +21,19 @@ export default {
                 sections.add(question.Section);
             });
 
-            sections.add("Total");
+            // sections.add("Total");
 
             return sections;
         }
     },
     data() {
         return {
-            step: 0,
+            step: 100,
             scores: new Map(),
             questions: [
                 {
                     "Section": "Frequency",
+                    "Score": 1,
                     "Text": "On average, in the past week, how often did you experience urge-to-cough sensations (e.g. throat irritation, tickle, feeling of something stuck)?",
                     "Options": [
                         "Never",
@@ -46,6 +47,7 @@ export default {
                 },
                 {
                     "Section": "Frequency",
+                    "Score": 1,
                     "Text": "On average, in the past week, how often did you cough in response to triggers (e.g., smoke, talking, changes in temperature, exercise, etc.)?",
                     "Options": [
                         "Never",
@@ -72,6 +74,7 @@ export default {
                 },
                 {
                     "Section": "Frequency",
+                    "Score": 1,
                     "Text": "On average, in the past week, how ofen did you cough during the day while awake?",
                     "Options": [
                         "Never",
@@ -147,17 +150,6 @@ export default {
             let nextQuestion = document.getElementById("scrollspyQuestion-" + nextQuestionIndex);
             if(nextQuestion) {
                 nextQuestion.scrollIntoView();
-
-                // for(let i = 0; i < this.questions.length; i++){
-                //     let el = document.getElementById("scrollspyQuestion-" + i);
-                //     if(i == nextQuestionIndex) {
-                //         el.classList.remove("overlay");
-                //     }
-                //     else {
-                //         el.classList.add("overlay");
-                //     }
-    
-                // }
             }
                 
         },
@@ -225,9 +217,14 @@ export default {
                         element.addClass('overlay');
                 }
             }
+        },
+
+        round(number, decimalPlaces) {
+            return (Math.round(number * 100) / 100).toFixed(decimalPlaces)
         }
     },
     mounted(){
+        this.calculateScores();
         var vueObj = this;
         $(document).ready(function(){
             // remove overlay from first question
@@ -318,8 +315,21 @@ export default {
                                 <p>Please show this page to your health practitioner</p>
                                 <div>
                                     <div>
-                                        <h4>Cough score</h4>
-                                        <table class="table mb-5">
+                                        <div class="border rounded p-3 m-3 text-center">
+                                            <h4>Cough Score</h4>
+                                            <h3>{{this.round(this.scores.get("Total"))}}</h3>
+                                        </div>
+
+                                        <div class="d-flex">
+                                            <div class="col-lg-6 col p-3" v-for="section in this.getSections">
+                                                <div class="border rounded p-3 text-center">
+                                                    <h4>{{section}}</h4>
+                                                    <h3>{{this.round(this.scores.get(section))}}</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--<table class="table mb-5">
                                             <thead>
                                                 <tr>
                                                     <th>Section</th>
@@ -332,9 +342,9 @@ export default {
                                                     <td class="p-2">{{(Math.round(this.scores.get(section) * 100) / 100).toFixed(2)}}</td>
                                                 </tr>
                                             </tbody>
-                                        </table>
+                                        </table>-->
 
-                                        <div class="d-flex">
+                                        <div class="d-flex mt-5">
                                             <div class="">
                                                 <button class="btn btn-primary" @click="this.step = 0">
                                                     Take the questionnaire again
