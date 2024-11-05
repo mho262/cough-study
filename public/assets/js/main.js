@@ -248,7 +248,7 @@ export default {
         var vueObj = this;
         $(document).ready(function(){
             // remove overlay from first question
-            $('#scrollspyQuestion-0').removeClass('overlay');
+           //  $('#scrollspyQuestion-0').removeClass('overlay');
 
             $(window).on( 'scroll', function(){
                 vueObj.isInViewport();
