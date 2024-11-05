@@ -33,7 +33,6 @@ export default {
             questions: [
                 {
                     "Section": "Frequency",
-                    "Score": 1,
                     "Text": "On average, in the past week, how often did you experience urge-to-cough sensations (e.g. throat irritation, tickle, feeling of something stuck)?",
                     "Options": [
                         "Never",
@@ -47,7 +46,6 @@ export default {
                 },
                 {
                     "Section": "Frequency",
-                    "Score": 1,
                     "Text": "On average, in the past week, how often did you cough in response to triggers (e.g., smoke, talking, changes in temperature, exercise, etc.)?",
                     "Options": [
                         "Never",
@@ -74,7 +72,6 @@ export default {
                 },
                 {
                     "Section": "Frequency",
-                    "Score": 1,
                     "Text": "On average, in the past week, how ofen did you cough during the day while awake?",
                     "Options": [
                         "Never",
@@ -224,7 +221,10 @@ export default {
         }
     },
     mounted(){
+
+        // set scores to zero if nothing selected
         this.calculateScores();
+
         var vueObj = this;
         $(document).ready(function(){
             // remove overlay from first question
@@ -312,19 +312,19 @@ export default {
                             </div>
 
                             <div v-else>
-                                <p>Please show this page to your health practitioner</p>
+                                <p>Please show this page to the study investigator</p>
                                 <div>
                                     <div>
                                         <div class="border rounded p-3 m-3 text-center">
                                             <h4>Cough Score</h4>
-                                            <h3>{{this.round(this.scores.get("Total"))}}</h3>
+                                            <h3>{{this.round(this.scores.get("Total"), 2)}}</h3>
                                         </div>
 
                                         <div class="d-flex">
                                             <div class="col-lg-6 col p-3" v-for="section in this.getSections">
                                                 <div class="border rounded p-3 text-center">
                                                     <h4>{{section}}</h4>
-                                                    <h3>{{this.round(this.scores.get(section))}}</h3>
+                                                    <h3>{{this.round(this.scores.get(section), 2)}}</h3>
                                                 </div>
                                             </div>
                                         </div>
@@ -344,8 +344,8 @@ export default {
                                             </tbody>
                                         </table>-->
 
-                                        <div class="d-flex mt-5">
-                                            <div class="">
+                                        <div class="mt-5">
+                                            <div class="d-grid gap-2">
                                                 <button class="btn btn-primary" @click="this.step = 0">
                                                     Take the questionnaire again
                                                 </button>
