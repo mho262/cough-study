@@ -139,6 +139,10 @@ export default {
         }
     },
     methods: {
+        start(){
+            document.getElementById("scrollspyQuestion-0").scrollIntoView();
+        },
+
         updateAnswer(questionIndex, answer){
             this.questions[questionIndex].Score = parseInt(answer);
 
@@ -197,7 +201,7 @@ export default {
         },
 
         isInViewport() {
-            const middleOfScreen = $(window).scrollTop() + $(window).height()/3;
+            const middleOfScreen = $(window).scrollTop() + $(window).height() / 3;
             const numberOfElements = $('.question-wrapper').length;
 
             for (let index = 0; index < numberOfElements; index++) {
@@ -223,8 +227,8 @@ export default {
                 //     element.removeClass('overlay');
                 // }
 
-                // if at bottom of page show element
-                if(index == numberOfElements - 1 && ($(window).scrollTop() + $(window).height() == $(document).height())){
+                // if at bottom of page show element ($(window).scrollTop() + $(window).height() == $(document).height()) - use if top of last element is above bottom third of screen because of android bug
+                if(index == numberOfElements - 1 && topOfElement < $(window).scrollTop() + ($(window).height()/2)){
                     $('#scrollspyQuestion-' + (index - 1)).addClass('overlay'); // hide second last question
                     element.removeClass('overlay');
                 }
@@ -274,7 +278,7 @@ export default {
             
     },
     template: /*html*/`
-        <nav class="navbar" style="background-color: #7A003C">
+        <nav class="navbar d-none" style="background-color: #7A003C">
             <div class="container-fluid">
             <a class="navbar-brand ps-3" href="#" style="color: #FDBF57">
                 <!--<img src="/assets/images/mcmaster-logo-2024-col-768x768.jpg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">-->
@@ -296,6 +300,12 @@ export default {
 
                             <div v-if="this.step < this.questions.length">
                                 <p>Select the response that best describes how you have been in the past week.</p>
+
+                                <div class="d-grid gap-2 mt-5">
+                                    <button class="btn btn-primary" @click="this.start()">
+                                        Start
+                                    </button>
+                                </div>
 
                                 <div>
                                     <div data-bs-spy="scroll" data-bs-smooth-scroll="true">
