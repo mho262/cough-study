@@ -288,7 +288,7 @@ export default {
         </nav>
 
         <main class="container pt-5">
-            <div class="rounded pt-3">
+            <div class="pt-3">
                 <div class="row">
                     <div class="col-xl-8 col-10 mx-auto">
                         <div class="my-3">
@@ -379,7 +379,7 @@ export default {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>                          
                         </div>
                     </div>
                 </div>
@@ -387,7 +387,9 @@ export default {
         </main>
 
         <!-- Footer-->
-        <footer class="footer bg-black small text-center text-white-50">
-            <div class="container px-4 px-lg-5"></div>
+        <footer class="footer small text-center bg-dark text-secondary mt-5">
+            <div class="container px-4 py-5">
+                Copyright © 2024 McMaster University, Hamilton, Ontario, Canada. The McMaster Cough Severity Questonnaire (MCSQ), authored by Elena Kum et al, is the copyright of McMaster University (Copyright© 2024, McMaster University). The MCSQ must not be copied, distributed, or used in any way without the prior written consent of McMaster University. Contact the McMaster Industry Liaison Office at McMaster University, email: <a class="text-secondary" href="mailto:milo@mcmaster.ca">milo@mcmaster.ca</a> for licensing details.
+            </div>
         </footer>`
 }
