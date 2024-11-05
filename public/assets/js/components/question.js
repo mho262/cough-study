@@ -23,15 +23,19 @@ export default {
     },
     template: /*html*/`
     <div>
-        <div class="">
-            {{this.Index}}. {{this.Text}}
-        </div>
-        <div class="ms-4 mt-3">
-            <div class="form-check my-2" v-for="(option, index) in this.Options">
-                <input class="form-check-input" type="radio" :name="'questionOptionsGroup_' + this.Index" :id="'questionOptionsGroup_' + this.Index + '_questionOption_' + index" :value="index" @change="this.answerChanged" :checked="index == this.Score">
-                <label class="form-check-label" :for="'questionOptionsGroup_' + this.Index + '_questionOption_' + index">
-                    {{option}}
-                </label>
+        <div class="d-flex">
+           <div>{{this.Index}}.</div>
+           <div class="ms-3">
+                <div>{{this.Text}}</div>
+
+                <div class="ms-3 mt-3">
+                    <div class="form-check my-2" v-for="(option, index) in this.Options">
+                        <input class="form-check-input" type="radio" :name="'questionOptionsGroup_' + this.Index" :id="'questionOptionsGroup_' + this.Index + '_questionOption_' + index" :value="index" @change="this.answerChanged" :checked="index == this.Score">
+                        <label class="form-check-label" :for="'questionOptionsGroup_' + this.Index + '_questionOption_' + index">
+                            {{option}}
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
     </div>`
