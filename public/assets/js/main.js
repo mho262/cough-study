@@ -147,6 +147,9 @@ export default {
             let nextQuestion = document.getElementById("scrollspyQuestion-" + nextQuestionIndex);
             if(nextQuestion) {
                 nextQuestion.scrollIntoView();
+
+                // make sure next question is visible
+                // nextQuestion.classList.remove("overlay");
             }
                 
         },
@@ -194,10 +197,10 @@ export default {
         },
 
         isInViewport() {
-            const middleOfScreen = $(window).scrollTop() + $(window).height()/2;
+            const middleOfScreen = $(window).scrollTop() + $(window).height()/3;
             const numberOfElements = $('.question-wrapper').length;
 
-            for (let index = 1; index <= numberOfElements; index++) {
+            for (let index = 0; index < numberOfElements; index++) {
                 const element = $('#scrollspyQuestion-' + index);
                 const elementHeight = element.outerHeight();
                 
@@ -213,6 +216,19 @@ export default {
                     } else {
                         element.addClass('overlay');
                 }
+
+                // if at top of page show element
+                // if(index == 0 && ($(window).scrollTop() == 0)){
+                //     // $('#scrollspyQuestion-' + (index - 1)).addClass('overlay'); // hide second last question
+                //     element.removeClass('overlay');
+                // }
+
+                // if at bottom of page show element
+                if(index == numberOfElements - 1 && ($(window).scrollTop() + $(window).height() == $(document).height())){
+                    $('#scrollspyQuestion-' + (index - 1)).addClass('overlay'); // hide second last question
+                    element.removeClass('overlay');
+                }
+                    
             }
         },
 
@@ -258,22 +274,23 @@ export default {
             
     },
     template: /*html*/`
-        <!--<nav id="navbar-example2" class="navbar bg-body-tertiary px-3 mb-3">
-            <a class="navbar-brand" href="#">Cough Study Questionnaire</a>
-            <ul class="nav nav-pills">
-                <li class="nav-item" v-for="(question, index) in this.questions">
-                    <a class="nav-link" :href="'#scrollspyQuestion-' + index">{{index + 1}}</a>
-                </li>
-            </ul>
-        </nav>-->
+        <nav class="navbar" style="background-color: #7A003C">
+            <div class="container-fluid">
+            <a class="navbar-brand ps-3" href="#" style="color: #FDBF57">
+                <!--<img src="/assets/images/mcmaster-logo-2024-col-768x768.jpg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">-->
+                McMaster University Cough Study
+            </a>
+            </div>
+        </nav>
 
         <main class="container pt-5">
             <div class="rounded pt-3">
                 <div class="row">
                     <div class="col-xl-8 col-10 mx-auto">
                         <div class="my-3">
-                            <h1>Cough Study Questionnaire</h1>
+                            <h1>McMaster Cough Severity Questionnaire</h1>
                             <p class="lead">This questionnaire is intended to measure the severity of your cough. It is for informational purposes only.</p>
+
 
                             <hr class="my-4"/>
 
@@ -283,7 +300,6 @@ export default {
                                 <div>
                                     <div data-bs-spy="scroll" data-bs-smooth-scroll="true">
                                         <div class="question-wrapper overlay py-5" :id="'scrollspyQuestion-' + index" v-for="(question, index) in this.questions">
-                                            <!--<a :href="'#scrollspyQuestion-' + index"></a>-->
                                             <Question class="py-5"
                                                 :Index="index + 1"
                                                 :Text="question.Text"
