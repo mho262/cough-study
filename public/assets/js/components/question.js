@@ -9,12 +9,11 @@ export default {
     },
     watch: { 
         Score: function(newVal, oldVal) { // watch it
-          this.score = newVal
+          // this.score = newVal
         }
     },
     data() {
         return {
-            score: 0
         }
     },
     methods: {
@@ -29,7 +28,7 @@ export default {
         </div>
         <div class="ms-4 mt-3">
             <div class="form-check my-2" v-for="(option, index) in this.Options">
-                <input class="form-check-input" type="radio" :name="'questionOptionsGroup_' + this.Index" :id="'questionOptionsGroup_' + this.Index + '_questionOption_' + index" v-model="this.score" :value="index" @change="this.answerChanged">
+                <input class="form-check-input" type="radio" :name="'questionOptionsGroup_' + this.Index" :id="'questionOptionsGroup_' + this.Index + '_questionOption_' + index" :value="index" @change="this.answerChanged" :checked="index == this.Score">
                 <label class="form-check-label" :for="'questionOptionsGroup_' + this.Index + '_questionOption_' + index">
                     {{option}}
                 </label>

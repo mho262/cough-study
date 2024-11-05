@@ -24,48 +24,12 @@ export default {
             sections.add("Total");
 
             return sections;
-        },
-
-        calculateScores(){
-            let counts = new Map();
-            let scores = new Map();
-            
-            counts.set("Total", 0);
-            scores.set("Total", 0);
-
-            this.questions.forEach(question => {
-                if(!counts.has(question.Section))
-                    counts.set(question.Section, 0);
-
-                if(!scores.has(question.Section))
-                    scores.set(question.Section, 0);
-
-                if(question.Score)
-                {
-                    let score = scores.get(question.Section);
-                    scores.set(question.Section, score + question.Score);
-
-                    let total = scores.get("Total");
-                    scores.set("Total", total + question.Score);
-                }
-                
-                counts.set(question.Section, counts.get(question.Section) + 1);
-                counts.set("Total", counts.get("Total") + 1);
-            });
-
-            [...counts.keys()].forEach(key => {
-                let score = scores.get(key);
-                let count = counts.get(key);
-                let average = score / count;
-                scores.set(key, average);
-            })
-
-            return scores;
         }
     },
     data() {
         return {
             step: 0,
+            scores: new Map(),
             questions: [
                 {
                     "Section": "Frequency",
@@ -178,16 +142,136 @@ export default {
         updateAnswer(questionIndex, answer){
             this.questions[questionIndex].Score = parseInt(answer);
 
-            console.log(this.questions);
+            // go  to next question
+            let nextQuestionIndex = questionIndex + 1;
+            let nextQuestion = document.getElementById("scrollspyQuestion-" + nextQuestionIndex);
+            if(nextQuestion) {
+                nextQuestion.scrollIntoView();
+
+                // for(let i = 0; i < this.questions.length; i++){
+                //     let el = document.getElementById("scrollspyQuestion-" + i);
+                //     if(i == nextQuestionIndex) {
+                //         el.classList.remove("overlay");
+                //     }
+                //     else {
+                //         el.classList.add("overlay");
+                //     }
+    
+                // }
+            }
+                
+        },
+
+        calculateScores(){
+            let counts = new Map();
+            let scores = new Map();
+            
+            counts.set("Total", 0);
+            scores.set("Total", 0);
+
+            this.questions.forEach(question => {
+                if(!counts.has(question.Section))
+                    counts.set(question.Section, 0);
+
+                if(!scores.has(question.Section))
+                    scores.set(question.Section, 0);
+
+                if(question.Score)
+                {
+                    let score = scores.get(question.Section);
+                    scores.set(question.Section, score + question.Score);
+
+                    let total = scores.get("Total");
+                    scores.set("Total", total + question.Score);
+                }
+                
+                counts.set(question.Section, counts.get(question.Section) + 1);
+                counts.set("Total", counts.get("Total") + 1);
+            });
+
+            [...counts.keys()].forEach(key => {
+                let score = scores.get(key);
+                let count = counts.get(key);
+                let average = score / count;
+                scores.set(key, average);
+            })
+
+            this.scores = scores;
         },
 
         submit(){
+            this.calculateScores();
+            this.step=this.questions.length + 1;
+        },
 
+        isInViewport() {
+            const middleOfScreen = $(window).scrollTop() + $(window).height()/2;
+            const numberOfElements = $('.question-wrapper').length;
+
+            for (let index = 1; index <= numberOfElements; index++) {
+                const element = $('#scrollspyQuestion-' + index);
+                const elementHeight = element.outerHeight();
+                
+                let topOfElement = 0;
+                if (element.length) {
+                    topOfElement = element.offset().top;
+                }
+                
+                const bottomOfElement = topOfElement + elementHeight;
+
+                if ((middleOfScreen > topOfElement) && (middleOfScreen <  bottomOfElement)){
+                        element.removeClass('overlay');
+                    } else {
+                        element.addClass('overlay');
+                }
+            }
         }
     },
-    template: /*html*/`<!-- Navigation-->   
-        <main class="container">
-            <div class="rounded">
+    mounted(){
+        var vueObj = this;
+        $(document).ready(function(){
+            // remove overlay from first question
+            $('#scrollspyQuestion-0').removeClass('overlay');
+
+            $(window).on( 'scroll', function(){
+                vueObj.isInViewport();
+            });
+        });
+
+        
+        // const firstScrollSpyEl = document.querySelector('[data-bs-spy="scroll"]')
+        // firstScrollSpyEl.addEventListener('activate.bs.scrollspy', (event) => {
+            
+
+        //     let activeIndex = event.relatedTarget.getAttribute("href").split("-")[1];
+        //     console.log("scrolled past", event.relatedTarget, activeIndex);
+
+        //     for(let i = 0; i < this.questions.length; i++){
+        //         let el = document.getElementById("scrollspyQuestion-" + i);
+        //         if(i == activeIndex) {
+        //             el.classList.remove("overlay");
+        //         }
+        //         else {
+        //             el.classList.add("overlay");
+        //         }
+
+        //         console.log(activeIndex, el);
+        //     }
+        // })
+            
+    },
+    template: /*html*/`
+        <!--<nav id="navbar-example2" class="navbar bg-body-tertiary px-3 mb-3">
+            <a class="navbar-brand" href="#">Cough Study Questionnaire</a>
+            <ul class="nav nav-pills">
+                <li class="nav-item" v-for="(question, index) in this.questions">
+                    <a class="nav-link" :href="'#scrollspyQuestion-' + index">{{index + 1}}</a>
+                </li>
+            </ul>
+        </nav>-->
+
+        <main class="container pt-5">
+            <div class="rounded pt-3">
                 <div class="row">
                     <div class="col-xl-8 col-10 mx-auto">
                         <div class="my-3">
@@ -200,16 +284,19 @@ export default {
                                 <p>Select the response that best describes how you have been in the past week.</p>
 
                                 <div>
-                                    <div class="">
-                                        <Question class="my-5" v-for="(question, index) in this.questions"
-                                            :Index="index + 1"
-                                            :Text="question.Text"
-                                            :Options="question.Options"
-                                            :Score="question.Score"
+                                    <div data-bs-spy="scroll" data-bs-smooth-scroll="true">
+                                        <div class="question-wrapper overlay py-5" :id="'scrollspyQuestion-' + index" v-for="(question, index) in this.questions">
+                                            <!--<a :href="'#scrollspyQuestion-' + index"></a>-->
+                                            <Question class="py-5"
+                                                :Index="index + 1"
+                                                :Text="question.Text"
+                                                :Options="question.Options"
+                                                :Score="question.Score"
 
-                                            @updated="answer => this.updateAnswer(index, answer)"
-                                        >
-                                        </Question>
+                                                @updated="answer => this.updateAnswer(index, answer)"
+                                            >
+                                            </Question>
+                                        </div>
 
                                         <hr class="my-4"/>
 
@@ -218,7 +305,7 @@ export default {
                                                 <!--<button v-if="this.step + 1 < this.questions.length" class="btn btn-primary" @click="this.step++">
                                                     Next >
                                                 </button>-->
-                                                <button class="btn btn-primary" @click="this.step=this.questions.length + 1">
+                                                <button class="btn btn-primary" @click="this.submit()">
                                                     Submit
                                                 </button>
                                             </div>
@@ -242,7 +329,7 @@ export default {
                                             <tbody>
                                                 <tr v-for="section in this.getSections">
                                                     <td class="p-2 pe-4" style="width: 1%">{{section}}</td>
-                                                    <td class="p-2">{{(Math.round(this.calculateScores.get(section) * 100) / 100).toFixed(2)}}</td>
+                                                    <td class="p-2">{{(Math.round(this.scores.get(section) * 100) / 100).toFixed(2)}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>

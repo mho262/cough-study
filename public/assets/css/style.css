@@ -1,0 +1,19 @@
+p-desktop-5 {
+    padding: 3rem !important;
+}
+
+div.question-wrapper
+{  
+    opacity: 1
+}
+
+.overlay {
+    opacity: 0.3 !important;
+}
+
+
+/*
+div.question-wrapper:has(a.active) 
+{  
+    opacity: 0.3
+}*/
