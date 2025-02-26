@@ -24,6 +24,11 @@ export default {
             // sections.add("Total");
 
             return sections;
+        },
+
+        getYear(){
+            let today = new Date();
+            return today.getFullYear();
         }
     },
     data() {
@@ -72,7 +77,7 @@ export default {
                 },
                 {
                     "Section": "Frequency",
-                    "Text": "On average, in the past week, how ofen did you cough during the day while awake?",
+                    "Text": "On average, in the past week, how often did you cough during the day while awake?",
                     "Options": [
                         "Never",
                         "Hardly ever",
@@ -85,7 +90,7 @@ export default {
                 },
                 {
                     "Section": "Intensity",
-                    "Text": "On average, in the past week, how ofen did coughing disturb your sleep at night?",
+                    "Text": "On average, in the past week, how often did coughing disturb your sleep at night?",
                     "Options": [
                         "Never",
                         "Hardly ever",
@@ -98,7 +103,7 @@ export default {
                 },
                 {
                     "Section": "Intensity",
-                    "Text": "On average, in the past week, how ofen did you experience prolonged episodes/bouts of coughing?",
+                    "Text": "On average, in the past week, how often did you experience prolonged episodes/bouts of coughing?",
                     "Options": [
                         "Never",
                         "Hardly ever",
@@ -238,6 +243,15 @@ export default {
 
         round(number, decimalPlaces) {
             return (Math.round(number * 100) / 100).toFixed(decimalPlaces)
+        },
+
+        reset() {
+            this.step = 0;
+            
+            let i;
+            for(i = 0; i < this.questions.length; i++) {
+                this.questions[i].Score = null;
+            }
         }
     },
     mounted(){
@@ -293,16 +307,16 @@ export default {
                     <div class="col-xl-8 col-10 mx-auto">
                         <div class="my-3">
                             <h1>McMaster Cough Severity Questionnaire</h1>
-                            <p class="lead">This questionnaire is intended to measure the severity of your cough. It is for informational purposes only.</p>
+                            <p class="lead fs-3">This questionnaire is intended to measure the severity of your cough. It is for informational purposes only.</p>
 
 
                             <hr class="my-4"/>
 
                             <div v-if="this.step < this.questions.length">
-                                <p>Select the response that best describes how you have been in the past week.</p>
+                                <p class="fs-3">Select the response that best describes how you have been in the past week.</p>
 
                                 <div class="d-grid gap-2 mt-5">
-                                    <button class="btn btn-primary" @click="this.start()">
+                                    <button class="btn btn-primary fs-2" @click="this.start()">
                                         Start
                                     </button>
                                 </div>
@@ -328,7 +342,7 @@ export default {
                                                 <!--<button v-if="this.step + 1 < this.questions.length" class="btn btn-primary" @click="this.step++">
                                                     Next >
                                                 </button>-->
-                                                <button class="btn btn-primary" @click="this.submit()">
+                                                <button class="btn btn-primary fs-3" @click="this.submit()">
                                                     Submit
                                                 </button>
                                             </div>
@@ -338,19 +352,18 @@ export default {
                             </div>
 
                             <div v-else>
-                                <p>Please show this page to the study investigator</p>
                                 <div>
                                     <div>
                                         <div class="border rounded p-3 m-3 text-center">
-                                            <h4>Cough Score</h4>
-                                            <h3>{{this.round(this.scores.get("Total"), 2)}}</h3>
+                                            <h4>Total Score</h4>
+                                            <h3>{{this.round(this.scores.get("Total"), 2)}}/6</h3>
                                         </div>
 
                                         <div class="d-flex">
                                             <div class="col-lg-6 col p-3" v-for="section in this.getSections">
                                                 <div class="border rounded p-3 text-center">
-                                                    <h4>{{section}}</h4>
-                                                    <h3>{{this.round(this.scores.get(section), 2)}}</h3>
+                                                    <h4>{{section}} Score</h4>
+                                                    <h3>{{this.round(this.scores.get(section), 2)}}/6</h3>
                                                 </div>
                                             </div>
                                         </div>
@@ -372,7 +385,7 @@ export default {
 
                                         <div class="mt-5">
                                             <div class="d-grid gap-2">
-                                                <button class="btn btn-primary" @click="this.step = 0">
+                                                <button class="btn btn-primary fs-3" @click="this.reset()">
                                                     Take the questionnaire again
                                                 </button>
                                             </div>
@@ -389,7 +402,7 @@ export default {
         <!-- Footer-->
         <footer class="footer small text-center bg-dark text-secondary mt-5">
             <div class="container px-4 py-5">
-                Copyright © 2024 McMaster University, Hamilton, Ontario, Canada. The McMaster Cough Severity Questonnaire (MCSQ), authored by Elena Kum et al, is the copyright of McMaster University (Copyright© 2024, McMaster University). The MCSQ must not be copied, distributed, or used in any way without the prior written consent of McMaster University. Contact the McMaster Industry Liaison Office at McMaster University, email: <a class="text-secondary" href="mailto:milo@mcmaster.ca">milo@mcmaster.ca</a> for licensing details.
+                Copyright © {{this.getYear}} McMaster University, Hamilton, Ontario, Canada. The McMaster Cough Severity Questonnaire (MCSQ), authored by Elena Kum et al, is the copyright of McMaster University (Copyright© {{this.getYear}}, McMaster University). The MCSQ must not be copied, distributed, or used in any way without the prior written consent of McMaster University. Contact the McMaster Industry Liaison Office at McMaster University, email: <a class="text-secondary" href="mailto:milo@mcmaster.ca">milo@mcmaster.ca</a> for licensing details.
             </div>
         </footer>`
 }
